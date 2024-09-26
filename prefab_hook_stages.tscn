@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://diifulnf03rqq"]
+
+[ext_resource type="Script" path="res://HookStages.cs" id="1_dx72b"]
+[ext_resource type="Texture2D" uid="uid://dtdpdqhwu5wff" path="res://hook.png" id="1_frh4b"]
+[ext_resource type="Texture2D" uid="uid://c5gt48of6y2ra" path="res://sacrifice.png" id="2_dtwg7"]
+[ext_resource type="Texture2D" uid="uid://rh4qcgn5gt3q" path="res://tunneltimer.png" id="4_nuc48"]
+
+[node name="HookStages" type="Node2D" node_paths=PackedStringArray("_firstStage", "_secondStage", "_sacrificed", "_tunnelTimerProgress")]
+script = ExtResource("1_dx72b")
+_firstStage = NodePath("FirstStage")
+_secondStage = NodePath("SecondStage")
+_sacrificed = NodePath("Sacrificed")
+_tunnelTimerProgress = NodePath("TunnelTimer/Progress")
+
+[node name="FirstStage" type="Sprite2D" parent="."]
+position = Vector2(16, 0)
+texture = ExtResource("1_frh4b")
+
+[node name="SecondStage" type="Sprite2D" parent="."]
+position = Vector2(-5, 0)
+texture = ExtResource("1_frh4b")
+
+[node name="Sacrificed" type="Sprite2D" parent="."]
+texture = ExtResource("2_dtwg7")
+
+[node name="TunnelTimer" type="Node2D" parent="."]
+position = Vector2(45.695, -31.175)
+
+[node name="Progress" type="TextureProgressBar" parent="TunnelTimer"]
+offset_right = 60.0
+offset_bottom = 60.0
+fill_mode = 5
+texture_progress = ExtResource("4_nuc48")

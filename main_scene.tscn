@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3 uid="uid://c7u4dr1x0upg4"]
+
+[ext_resource type="Script" path="res://Setup.cs" id="1_qmeg3"]
+[ext_resource type="Texture2D" uid="uid://gsuhm534vobp" path="res://reference.png" id="2_uihyl"]
+[ext_resource type="Script" path="res://Controller.cs" id="2_wy0k8"]
+[ext_resource type="PackedScene" uid="uid://diifulnf03rqq" path="res://prefab_hook_stages.tscn" id="3_qjh6h"]
+
+[node name="root" type="Node2D"]
+
+[node name="Setup" type="Node" parent="."]
+script = ExtResource("1_qmeg3")
+
+[node name="Controller" type="Node" parent="." node_paths=PackedStringArray("_hookStages")]
+script = ExtResource("2_wy0k8")
+_hookStages = [NodePath("../HookStages/Player1"), NodePath("../HookStages/Player2"), NodePath("../HookStages/Player3"), NodePath("../HookStages/Player4")]
+
+[node name="Reference" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("2_uihyl")
+centered = false
+
+[node name="HookStages" type="Node2D" parent="."]
+position = Vector2(-11.36, 457.26)
+
+[node name="Player1" parent="HookStages" instance=ExtResource("3_qjh6h")]
+position = Vector2(65.95, 0)
+
+[node name="Player2" parent="HookStages" instance=ExtResource("3_qjh6h")]
+position = Vector2(65.95, 87.07)
+
+[node name="Player3" parent="HookStages" instance=ExtResource("3_qjh6h")]
+position = Vector2(65.95, 176.145)
+
+[node name="Player4" parent="HookStages" instance=ExtResource("3_qjh6h")]
+position = Vector2(65.95, 265.645)
