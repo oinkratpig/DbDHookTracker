@@ -33,12 +33,12 @@ public partial class Controller : Node
         // 1-4 keys cycle the player's hook stages
         for(int i = 0; i < 4; i++)
             if (_globalInput.IsActionJustPressed($"CyclePlayer{i+1}"))
-                _hookStages[i].Stage++;
+                _hookStages[i].NextStage();
 
         // Reset stages
         if (_globalInput.IsActionJustPressed("Reset"))
             foreach (HookStages hookStages in _hookStages)
-                hookStages.Stage = 0;
+                hookStages.Reset();
 
     } // end _Process
 

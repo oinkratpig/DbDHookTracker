@@ -23,6 +23,7 @@ public partial class HookStages : Node
     private Color _tunnelTimerColor;
     private int _stage = -1;
     private float _tunnelTime;
+    private bool _nextCycleIsTunnelTimer = false;
 
     public static int MinStage => 0;
     public static int MaxStage => 3;
@@ -30,7 +31,7 @@ public partial class HookStages : Node
     public float TunnelTime
     {
         get => _tunnelTime;
-        set
+        private set
         {
             _tunnelTime = value;
             _tunnelTimerProgress.Value = _tunnelTime / _tunnelTimerMaxSeconds * _tunnelTimerProgress.MaxValue;
@@ -40,13 +41,12 @@ public partial class HookStages : Node
     public int Stage
     {
         get => _stage;
-        set
+        private set
         {
             if (_stage == value) return;
 
             _stage = value;
-            while (_stage < MinStage) _stage += MaxStage;
-            while (_stage > MaxStage) _stage -= MaxStage+1;
+            while (_stage > MaxStage) _stage -= MaxStage + 1;
 
             // Unhooked
             if(_stage == 0)
@@ -54,7 +54,7 @@ public partial class HookStages : Node
                 _firstStage.Modulate = _inactiveColor;
                 _secondStage.Modulate = _inactiveColor;
                 _sacrificed.Visible = false;
-                TunnelTime = 0f;
+                TunnelTime = 0;
             }
             // First hook
             else if(_stage == 1)
@@ -62,7 +62,6 @@ public partial class HookStages : Node
                 _firstStage.Modulate = _activeColor;
                 _secondStage.Modulate = _inactiveColor;
                 _sacrificed.Visible = false;
-                TunnelTime = _tunnelTimerMaxSeconds;
             }
             // Second hook
             else if (_stage == 2)
@@ -70,7 +69,6 @@ public partial class HookStages : Node
                 _firstStage.Modulate = _activeColor;
                 _secondStage.Modulate = _activeColor;
                 _sacrificed.Visible = false;
-                TunnelTime = _tunnelTimerMaxSeconds;
             }
             // Sacrificed
             else if (_stage == 3)
@@ -78,7 +76,7 @@ public partial class HookStages : Node
                 _firstStage.Modulate = _activeColor;
                 _secondStage.Modulate = _activeColor;
                 _sacrificed.Visible = true;
-                TunnelTime = 0f;
+                TunnelTime = 0;
             }
         }
     }
@@ -99,8 +97,7 @@ public partial class HookStages : Node
     {
         _sacrificed.Modulate = _activeColor;
         _tunnelTimerProgress.Modulate = _tunnelTimerColor;
-        TunnelTime = 0f;
-        Stage = 0;
+        Reset();
 
     } // end _Ready
 
@@ -109,5 +106,37 @@ public partial class HookStages : Node
         TunnelTime = (float)Mathf.Max(TunnelTime - delta, 0f);
 
     } // end _Process
+
+    /// <summary>
+    /// Reset hook stage.
+    /// </summary>
+    public void Reset()
+    {
+        _tunnelTime = -1;
+        Stage = 0;
+        _nextCycleIsTunnelTimer = false;
+
+    } // end Reset
+
+    /// <summary>
+    /// Next hook stage.
+    /// </summary>
+    public void NextStage()
+    {
+        // Tunnel timer
+        if(_nextCycleIsTunnelTimer)
+        {
+            _nextCycleIsTunnelTimer = false;
+            TunnelTime = _tunnelTimerMaxSeconds;
+        }
+        // Hooked
+        else
+        {
+            Stage++;
+            if (Stage == 1 || Stage == 2)
+                _nextCycleIsTunnelTimer = true;
+        }
+
+    } // end NextStage
 
 } // end class HookStages
